@@ -25,9 +25,12 @@ internal class Program {
 
             db.SaveChanges();
         }
+
+        Console.WriteLine("=======================Local====================");
+
         //Получим всех работников одной компании
         //Методом Load()
-            using (AppContext db = new AppContext())
+        using (AppContext db = new AppContext())
             {
             Company? company = db.Companies.FirstOrDefault();
             if (company != null)
@@ -69,6 +72,48 @@ internal class Program {
                 db.Entry(user).Reference(u => u.Company).Load();
                 Console.WriteLine($"{user.Name} - {user.Company?.Name}");
             }
+        }
+
+
+        using (AppContext db = new AppContext())
+        {
+            db.Users.Load(); db.Companies.Load();
+            //var users = db.Users.ToList(); 
+            //var companies = db.Companies.ToList();
+            
+            //foreach (var user in users)
+            // Console.WriteLine($"User: {user.Name}");
+            //Console.WriteLine("================================================");
+
+            //foreach (var user in companies)
+            //Console.WriteLine($"User: {user.Name}");
+            //Console.WriteLine("================================================");
+
+            //foreach (var user in users)
+            //Console.WriteLine($"{user.Name} - {user.Company?.Name}");
+            
+            foreach (var user in db.Users.Local)
+                Console.WriteLine($"{user.Name} - {user.Company?.Name}");
+
+            Console.WriteLine("================================================");
+            // получаем всех сотрудников
+            //using (AppContext db = new AppContext())
+            //{
+            //    Company? company1 = db.Companies.Find(1);
+            //    if (company1 != null)
+            //    {
+            //        db.Users.Where(u => u.CompanyId == company1.Id).Load();
+            //        foreach (var u in company1.Users) Console.WriteLine($"User: {u.Name}");
+            //    }
+
+            //    Company? company2 = db.Companies.Find(2);
+            //    if (company2 != null)
+            //    {
+            //        db.Users.Where(u => u.CompanyId == company2.Id).Load();
+            //        foreach (var u in company2.Users) Console.WriteLine($"User: {u.Name}");
+            //    }
+
+            //    foreach (var u in db.Users) Console.WriteLine($"User: {u.Name}");
         }
     }
 }
